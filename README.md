@@ -1,9 +1,9 @@
 # HackerOne Alchemy
-A tool for making bug bounty life easier!
+A tool for making bug bounty life easier! This tool generates statistics around reports and also makes it easier to identify reports that need more attention.
 
 # Example Usage
 ```
-(env)mjb-C1MQ533FG944:HackerOneAlchemy mandatory$ source env/bin/activate; python hackerone_alchemy.py --metrics --load-reports all_reports.reports
+(env)~ source env/bin/activate; python hackerone_alchemy.py --metrics --load-reports all_reports.reports
 
  ██░ ██  ▄▄▄       ▄████▄   ██ ▄█▀▓█████  ██▀███   ▒█████   ███▄    █ ▓█████ 
 ▓██░ ██▒▒████▄    ▒██▀ ▀█   ██▄█▒ ▓█   ▀ ▓██ ▒ ██▒▒██▒  ██▒ ██ ▀█   █ ▓█   ▀ 
@@ -52,10 +52,10 @@ Closing reports as 'Spam': Priceless
 First, clone that sweet repo:
 
 ```
-git clone gitolite@code.uber.internal:engsec/hackeronealchemy
+git clone {{REPLACE WITH GITHUB CLONE URL}}
 ```
 
-Slide into that [DM`[DEL][DEL]`]() directory:
+Slide into that directory:
 
 ```
 cd hackeronealchemy
@@ -68,13 +68,13 @@ virtualenv env
 source env/bin/activate
 ```
 
-Boom, now let's install the requirements:
+Install the requirements:
 
 ```
 pip install -r requirements.txt
 ```
 
-Now you'll need to edit the `config.yaml` with API credentials. You can get a set of API credentials from the following URL: [https://hackerone.com/uber/api](https://hackerone.com/uber/api):
+Now you'll need to edit the `config.yaml` with API credentials. You can get a set of API credentials from your HackerOne portal, something like https://hackerone.com/{PROGRAM_NAME}/api:
 
 ```
 vim config.yaml
@@ -85,6 +85,8 @@ Now that you've setup your `config.yaml` you are good to go! Test it's working w
 ```
 ./hackerone_alchemy.py --metrics
 ```
+
+Note: For the Phabricator integrations, you will need an ~/.arcrc file already setup for authentication.
 
 # Features
 ## Save reports for to disk for future quickloading
@@ -138,3 +140,5 @@ If you're the current bug bounty oncall, you can use `--oncall` to get a list of
 ```
 ./hackerone_alchemy.py --oncall
 ```
+
+This project is released under the [MIT License](LICENSE.md).

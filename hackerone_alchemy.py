@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Created using Metafidv2 by Matthew Bryant (mandatory)
-# Unauthorized use is stricly prohibited, please contact mandatory@gmail.com with questions/comments.
 import cookielib
 import argparse
 import requests
