@@ -1,3 +1,4 @@
+h1==1.2.0
 PyYAML==3.11
 beautifulsoup4==4.4.1
 phabricator==0.6.1
@@ -6,3 +7,4 @@ requests==2.10.0
 six==1.10.0
 wheel==0.24.0
 wsgiref==0.1.2
+requests_futures==0.9.7
