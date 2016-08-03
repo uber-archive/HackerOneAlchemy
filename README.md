@@ -3,7 +3,7 @@ A tool for making bug bounty life easier! This tool generates statistics around 
 
 # Example Usage
 ```
-(env)~ source env/bin/activate; python hackerone_alchemy.py --metrics --load-reports all_reports.reports
+(env)~ source env/bin/activate; python hackerone_alchemy.py --metrics
 
  ██░ ██  ▄▄▄       ▄████▄   ██ ▄█▀▓█████  ██▀███   ▒█████   ███▄    █ ▓█████ 
 ▓██░ ██▒▒████▄    ▒██▀ ▀█   ██▄█▒ ▓█   ▀ ▓██ ▒ ██▒▒██▒  ██▒ ██ ▀█   █ ▓█   ▀ 
@@ -52,13 +52,13 @@ Closing reports as 'Spam': Priceless
 First, clone that sweet repo:
 
 ```
-git clone {{REPLACE WITH GITHUB CLONE URL}}
+git clone "https://github.com/uber/HackerOneAlchemy.git"
 ```
 
 Slide into that directory:
 
 ```
-cd hackeronealchemy
+cd HackerOneAlchemy
 ```
 
 Now set up your `virtualenv` and `source` it:
@@ -74,11 +74,7 @@ Install the requirements:
 pip install -r requirements.txt
 ```
 
-Now you'll need to edit the `config.yaml` with API credentials. You can get a set of API credentials from your HackerOne portal, something like https://hackerone.com/{PROGRAM_NAME}/api:
-
-```
-vim config.yaml
-```
+You'll need to edit the `config.yaml` with API credentials. You can get a set of API credentials from your HackerOne portal, something like https://hackerone.com/{PROGRAM_NAME}/api. You'll also want to set `hackerone_program` to your program's handle.
 
 Now that you've setup your `config.yaml` you are good to go! Test it's working with the following command:
 
@@ -89,25 +85,6 @@ Now that you've setup your `config.yaml` you are good to go! Test it's working w
 Note: For the Phabricator integrations, you will need an ~/.arcrc file already setup for authentication.
 
 # Features
-## Save reports for to disk for future quickloading
-In order to save time, you can save reports to a JSON cache file via the `--save-reports` flag. The following is an example:
-
-```
-./hackerone_alchemy.py --save-reports all_reports.json
-```
-
-This is useful if you want to quickly re-analyze data using HackerOne Alchemy:
-
-```
-./hackerone_alchemy.py --load-reports all_reports.json --metrics
-```
-
-This feature is also useful because you can save reports in a specific date range and then do analysis on that subset of data:
-
-```
-./hackerone_alchemy.py --save-reports since_launch.json --since-date "March 22, 2016" # Save all reports since our bug bounty public launch to file
-./hackerone_alchemy.py --load-reports since_launch.json --metrics # Get metrics for submissions since launch
-```
 
 ## Get HackerOne Metrics
 If you're writing a bug bounty status update post, or if you want to see the general health of the program you can use `--metrics` to get that data. For example, the following will get metrics on our bug bounty program since the beginning:
@@ -116,11 +93,10 @@ If you're writing a bug bounty status update post, or if you want to see the gen
 ./hackerone_alchemy.py --metrics
 ```
 
-In certain situations you may want metrics from a certain date. As mentioned above this is possible with the `--save-reports` and `--since-date` flag. For example, the following will grab bug bounty metrics since our launch date of March 22, 2016:
+In certain situations you may want metrics from a certain date. This is possible with the `--since-date` flag. For example, the following will grab bug bounty metrics since our launch date of March 22, 2016:
 
 ```
-./hackerone_alchemy.py --save-reports since_launch.json --since-date "March 22, 2016" # Save all reports since our bug bounty public launch to file
-./hackerone_alchemy.py --load-reports since_launch.json --metrics # Get metrics for submissions since launch
+./hackerone_alchemy.py --metrics --since-date "March 22, 2016" # Get metrics for submissions since launch
 ```
 
 ## Get HackerOne Bonus List
