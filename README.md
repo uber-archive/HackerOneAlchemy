@@ -33,18 +33,20 @@ A tool for making bug bounty life easier! This tool generates statistics around 
 
 TOTAL REPORT STATS
 ==================
-New reports: 21
-Triaged reports: 88
-Needs More Info reports: 145
-Resolved reports: 227
-Not Applicable reports: 221
-Informative reports: 870
-Duplicate reports: 365
-Spam reports: 15
-Signal to Noise ratio: 0.284810126582
-Number of Wordpress reports: 289
-Total reports: 1952
-Total bounty amount awarded: $330,470.48
+Total reports: 397
+Total Resolved: 15
+Total Spam: 0
+Total Triaged: 28
+Total Informative: 153
+Total Duplicate: 78
+Total Not-Applicable: 45
+Total New: 41
+Total Needs-More-Info: 37
+Mean resolution time: 10 days, 11:08:38.315467
+Mean first response time: 1 day, 13:38:19.589763
+Signal to Noise ratio: 0.217171717172
+Number of flagged reports: 0
+Total bounty amount awarded: $87,375.00
 Closing reports as 'Spam': Priceless
 ```
 
