@@ -180,7 +180,7 @@ class HackerOneAlchemy(object):
         return any(word in field.lower() for field in text_fields)
 
     def get_bonus_information(self, reports):
-        # Assumes `reports` is in reverse chronological from by creation date
+        # Assumes `reports` is in reverse chronological order by creation date
         accepted_by_reporter = collections.defaultdict(list)
 
         for report in reports:
