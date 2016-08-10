@@ -28,6 +28,7 @@ import collections
 import datetime as dt
 import json
 import re
+from decimal import Decimal
 
 import yaml
 from dateutil import parser as dateparser
@@ -119,7 +120,7 @@ class HackerOneAlchemy(object):
         stat_data = {}
         stat_data["total_reports"] = len(reports)
 
-        total_bounties = sum(r.total_payout for r in awarded_reports)
+        total_bounties = sum(r.total_bounty for r in awarded_reports)
         stat_data["total_bounties_awarded_amount"] = '${:,.2f}'.format(total_bounties)
 
         state_counts = dict((state, 0) for state in Report.STATES)
@@ -179,18 +180,32 @@ class HackerOneAlchemy(object):
         return any(word in field.lower() for field in text_fields)
 
     def get_bonus_information(self, reports):
-        resolved_by_reporter = collections.defaultdict(list)
-        return_dict = {}
+        # Assumes `reports` is in reverse chronological from by creation date
+        accepted_by_reporter = collections.defaultdict(list)
 
         for report in reports:
-            if report.state == "resolved":
-                resolved_by_reporter[report.reporter.username] = report
+            if report.state in {"resolved", "triaged"}:
+                accepted_by_reporter[report.reporter].append(report)
 
-        for reporter, reports_by_reporter in resolved_by_reporter.items():
+        reporter_rewards = {}
+        for reporter, reports_by_reporter in accepted_by_reporter.items():
             if len(reports_by_reporter) >= 5:
-                return_dict[reporter] = reports_by_reporter
+                reporter_rewards[reporter] = self.calc_report_bonuses(reports_by_reporter)
 
-        return return_dict
+        return reporter_rewards
+
+    def calc_report_bonuses(self, reports):
+        report_bonuses = {}
+
+        # The first four reports are not eligible
+        eligible_reports = reports[:-4]
+
+        for report in eligible_reports:
+            other_reports = [r for r in reports if r is not report]
+            avg_bounty = sum(r.total_bounty for r in other_reports) / len(other_reports)
+            report_bonuses[report] = avg_bounty * Decimal('0.10')
+
+        return report_bonuses
 
     def print_bonus_information(self, reports):
         bonuses_dict = self.get_bonus_information(reports)
@@ -199,10 +214,11 @@ class HackerOneAlchemy(object):
 
         for reporter, reports_by_reporter in bonuses_dict.items():
             print("Username:", reporter)
-            print("HackerOne Profile: https://hackerone.com/" + reporter)
-            print("Reports (All Triaged/Resolved bugs received since date): ")
-            for report in reports_by_reporter:
-                print("\t" + report.html_url, report.state, "'%s'\n" % report.title)
+            print("HackerOne Profile: https://hackerone.com/" + reporter.username)
+            print("Reports (All eligible bugs received since date): ")
+            for report, bonus in reports_by_reporter.items():
+                print("\t", "$" + str(bonus),
+                      report.html_url, report.state, "'%s'\n" % report.title)
 
     def comments_since_last_response(self, report):
         comments_since_last_response = 0
