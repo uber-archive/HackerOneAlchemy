@@ -26,7 +26,6 @@ from __future__ import print_function, unicode_literals, division, absolute_impo
 import argparse
 import collections
 import datetime as dt
-import json
 import re
 from decimal import Decimal
 
@@ -38,9 +37,7 @@ from h1.client import HackerOneClient
 from h1.models import (
     ActivityComment,
     ActivityStateChange,
-    HackerOneEncoder,
     Report,
-    hydrate_objects,
 )
 
 BANNER = """
@@ -78,16 +75,6 @@ try:
 except IOError:
     print("Error reading config.yaml, have you created one?")
     raise
-
-
-def save_reports_file(filename, reports):
-    with open(filename, "wb") as f:
-        json.dump(reports, f, sort_keys=True, indent=4, cls=HackerOneEncoder)
-
-
-def load_reports_file(filename):
-    with open(filename, "rb") as f:
-        return hydrate_objects(json.load(f))
 
 
 class HackerOneAlchemy(object):
