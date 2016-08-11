@@ -67,6 +67,9 @@ BANNER = """
                                                         "k"
 """
 
+BONUS_PERIOD_DAYS = 90
+BONUS_REQUIRED_REPORTS = 4
+
 phab = Phabricator()  # This will use your ~/.arcrc file
 
 try:
@@ -176,7 +179,7 @@ class HackerOneAlchemy(object):
 
         reporter_rewards = {}
         for reporter, reports_by_reporter in accepted_by_reporter.items():
-            if len(reports_by_reporter) >= 5:
+            if len(reports_by_reporter) > BONUS_REQUIRED_REPORTS:
                 reporter_rewards[reporter] = self.calc_report_bonuses(reports_by_reporter)
 
         return reporter_rewards
@@ -185,14 +188,19 @@ class HackerOneAlchemy(object):
         report_bonuses = {}
 
         # The first four reports are not eligible
-        eligible_reports = reports[:-4]
+        eligible_reports = reports[:-BONUS_REQUIRED_REPORTS]
 
         for report in eligible_reports:
-            other_reports = [r for r in reports if r is not report]
-            avg_bounty = sum(r.total_bounty for r in other_reports) / len(other_reports)
-            report_bonuses[report] = avg_bounty * Decimal('0.10')
+            other_reports = [r for r in reports if r is not report and r.total_bounty]
+            report_bonuses[report] = self.calc_average_bounty(other_reports) * Decimal('0.10')
 
         return report_bonuses
+
+    def calc_average_bounty(self, reports):
+        awarded_reports = [r for r in reports if r.total_bounty is not None]
+        if not awarded_reports:
+            return Decimal('0.00')
+        return sum(r.total_bounty for r in awarded_reports) / len(awarded_reports)
 
     def print_bonus_information(self, reports):
         bonuses_dict = self.get_bonus_information(reports)
@@ -204,7 +212,7 @@ class HackerOneAlchemy(object):
             print("HackerOne Profile: https://hackerone.com/" + reporter.username)
             print("Reports (All eligible bugs received since date): ")
             for report, bonus in reports_by_reporter.items():
-                print("\t", "$" + str(bonus),
+                print("\t", '${:,.2f}'.format(bonus),
                       report.html_url, report.state, "'%s'\n" % report.title)
 
     def comments_since_last_response(self, report):
