@@ -255,13 +255,22 @@ def main(args):
     print(BANNER)
 
     date_range = dict(args.date_filters) if args.date_filters else {}
-    created_date_filters = _gen_date_filters("created", date_range)
-    reports = hackerone_bot.find_reports(created_date_filters)
-
     if args.bonuses:
         if "since_date" not in date_range:
             print("Bonuses flag provided without --since-date, cannot continue.")
             return
+        # The range for `--bonuses` should always cover the 90 days after `since_date`
+        if "before_date" in date_range:
+            print("Bonuses flag provided with --before-date, cannot continue.")
+            return
+
+        bonus_period_delta = dt.timedelta(days=BONUS_PERIOD_DAYS)
+        date_range["before_date"] = date_range["since_date"] + bonus_period_delta
+
+    created_date_filters = _gen_date_filters("created", date_range)
+    reports = hackerone_bot.find_reports(created_date_filters)
+
+    if args.bonuses:
         hackerone_bot.print_bonus_information(reports)
 
     if args.plsrespond:
