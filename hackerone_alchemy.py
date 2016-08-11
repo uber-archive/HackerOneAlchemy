@@ -266,6 +266,8 @@ def main(args):
 
         bonus_period_delta = dt.timedelta(days=BONUS_PERIOD_DAYS)
         date_range["before_date"] = date_range["since_date"] + bonus_period_delta
+        print("Generating bonuses for period starting on",
+              date_range["since_date"], "ending on", date_range["before_date"])
 
     created_date_filters = _gen_date_filters("created", date_range)
     reports = hackerone_bot.find_reports(created_date_filters)
