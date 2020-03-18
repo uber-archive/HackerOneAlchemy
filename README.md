@@ -1,4 +1,7 @@
 # HackerOne Alchemy
+
+(This project is deprecated and not maintained.)
+
 A tool for making bug bounty life easier! This tool generates statistics around reports and also makes it easier to identify reports that need more attention.
 
 # Example Usage
