@@ -1,4 +1,4 @@
-PyYAML==3.11
+PyYAML==5.1
 beautifulsoup4==4.4.1
 phabricator==0.6.1
 python-dateutil==2.5.3
